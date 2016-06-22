@@ -56,6 +56,22 @@ func (this *Set) Contains(val setValue) bool {
 	return res
 }
 
+func (this *Set) Subset(other *Set) bool {
+	for val := range this.Iter() {
+		if !other.Contains(val) {
+			return true
+		}
+	}
+	return true
+}
+
+func (this *Set) Equals(other *Set) bool {
+	if this.Length() != other.Length() {
+		return false
+	}
+	return this.Subset(other)
+}
+
 func (this *Set) Union(other *Set) *Set {
 	res := EmptySet()
 	for k, _ := range this.elements {
@@ -79,6 +95,12 @@ func (this *Set) Intersect(other *Set) *Set {
 		}
 	}
 	return res
+}
+
+func (this *Set) Extend(other *Set) {
+	for k, _ := range other.elements {
+		this.Add(k)
+	}
 }
 
 func (this *Set) Iter() <-chan setValue {
