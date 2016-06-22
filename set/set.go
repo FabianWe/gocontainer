@@ -59,7 +59,7 @@ func (this *Set) Contains(val SetValue) bool {
 func (this *Set) Subset(other *Set) bool {
 	for val := range this.Iter() {
 		if !other.Contains(val) {
-			return true
+			return false
 		}
 	}
 	return true

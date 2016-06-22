@@ -88,4 +88,56 @@ func TestSetCompare(t *testing.T) {
 	s2 := EmptySet()
 	checkSetEqual(t, s1, s2, true)
 	checkSetEqual(t, s2, s1, true)
+	checkSubset(t, s1, s2, true)
+	s2.Add(0)
+	checkSubset(t, s1, s2, true)
+	checkSubset(t, s2, s1, false)
+	for i := 1; i < 5; i++ {
+		s1.Add(i)
+		s2.Add(i)
+	}
+	checkSubset(t, s1, s2, true)
+	checkSubset(t, s2, s1, false)
+}
+
+func TestSetUnion(t *testing.T) {
+	s1 := EmptySet()
+	s2 := EmptySet()
+
+	for i := 0; i < 5; i++ {
+		s1.Add(i)
+	}
+	for i := 2; i < 10; i++ {
+		s2.Add(i)
+	}
+
+	resSet := EmptySet()
+	for i := 0; i < 10; i++ {
+		resSet.Add(i)
+	}
+
+	if !s1.Union(s2).Equals(resSet) {
+		t.Error("Union didn't work")
+	}
+}
+
+func TestSetIntersect(t *testing.T) {
+	s1 := EmptySet()
+	s2 := EmptySet()
+
+	for i := 0; i < 5; i++ {
+		s1.Add(i)
+	}
+	for i := 2; i < 10; i++ {
+		s2.Add(i)
+	}
+
+	resSet := EmptySet()
+	for i := 2; i < 5; i++ {
+		resSet.Add(i)
+	}
+
+	if !s1.Intersect(s2).Equals(resSet) {
+		t.Error("Intersect didn't work")
+	}
 }
