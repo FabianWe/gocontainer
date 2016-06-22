@@ -22,76 +22,76 @@
 
 package set
 
-type SetValue interface {}
+type setValue interface{}
 
 const maxBuffer = 10000
 
 // Set is a unordered collection of unique values.
 type Set struct {
-  elements map[SetValue]struct{}
+	elements map[setValue]struct{}
 }
 
 func EmptySet() *Set {
-  return &Set{make(map[SetValue]struct{})}
+	return &Set{make(map[setValue]struct{})}
 }
 
 func (this *Set) Length() int {
-  return len(this.elements)
+	return len(this.elements)
 }
 
 func (this *Set) Empty() bool {
-  return this.Length() == 0
+	return this.Length() == 0
 }
 
-func (this *Set) Add(val SetValue) {
-  this.elements[val] = struct{}{}
+func (this *Set) Add(val setValue) {
+	this.elements[val] = struct{}{}
 }
 
-func (this *Set) Remove(val SetValue) {
-  delete(this.elements, val)
+func (this *Set) Remove(val setValue) {
+	delete(this.elements, val)
 }
 
-func (this *Set) Contains(val SetValue) bool {
-  _, res := this.elements[val]
-  return res
+func (this *Set) Contains(val setValue) bool {
+	_, res := this.elements[val]
+	return res
 }
 
 func (this *Set) Union(other *Set) *Set {
-  res := EmptySet()
-  for k, _ := range this.elements {
-    res.Add(k)
-  }
-  for k, _ := range other.elements {
-    res.Add(k)
-  }
-  return res
+	res := EmptySet()
+	for k, _ := range this.elements {
+		res.Add(k)
+	}
+	for k, _ := range other.elements {
+		res.Add(k)
+	}
+	return res
 }
 
 func (this *Set) Intersect(other *Set) *Set {
-  s1, s2 := this, other
-  if other.Length() < this.Length() {
-    s1, s2 = other, this
-  }
-  res := EmptySet()
-  for k, _ := range s1.elements {
-    if s2.Contains(k) {
-      res.Add(k)
-    }
-  }
-  return res
+	s1, s2 := this, other
+	if other.Length() < this.Length() {
+		s1, s2 = other, this
+	}
+	res := EmptySet()
+	for k, _ := range s1.elements {
+		if s2.Contains(k) {
+			res.Add(k)
+		}
+	}
+	return res
 }
 
-func (this *Set) Iter() <-chan SetValue {
-  bufferSize := this.Length()
-  if bufferSize > maxBuffer {
-    bufferSize = maxBuffer
-  }
-  ch := make(chan SetValue, bufferSize)
-  go func() {
-    for k, _ := range this.elements {
-      ch <- k
-    }
-    close(ch)
-  } ()
-  return ch
+func (this *Set) Iter() <-chan setValue {
+	bufferSize := this.Length()
+	if bufferSize > maxBuffer {
+		bufferSize = maxBuffer
+	}
+	ch := make(chan setValue, bufferSize)
+	go func() {
+		for k, _ := range this.elements {
+			ch <- k
+		}
+		close(ch)
+	}()
+	return ch
 }
