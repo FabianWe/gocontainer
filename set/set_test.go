@@ -23,40 +23,69 @@
 package set
 
 import (
-  "testing"
+	"testing"
 )
 
 func checkSetLen(t *testing.T, s *Set, len int) {
-  n := s.Length()
-  if n != len {
-    t.Errorf("s.len=%d, wanted %d", n, len)
-  }
+	n := s.Length()
+	if n != len {
+		t.Errorf("s.len=%d, wanted %d", n, len)
+	}
 }
 
 func checkContains(t *testing.T, s *Set, val int, res bool) {
-  if s.Contains(val) != res {
-    if res {
-      t.Errorf("Expected that %d is contained in set, but it isn't", val)
-    } else {
-      t.Errorf("Expected that %d isn't contained in set, but it is", val)
-    }
-  }
+	if s.Contains(val) != res {
+		if res {
+			t.Errorf("Expected that %d is contained in set, but it isn't", val)
+		} else {
+			t.Errorf("Expected that %d isn't contained in set, but it is", val)
+		}
+	}
 }
 
 func TestSet(t *testing.T) {
-  s := EmptySet()
-  checkSetLen(t, s, 0)
-  checkContains(t, s, 0, false)
-  s.Add(0)
-  s.Add(0)
-  checkContains(t, s, 0, true)
-  checkSetLen(t, s, 1)
-  for i := 1; i < 10; i++ {
-    s.Add(i)
-  }
-  checkSetLen(t, s, 10)
-  checkContains(t, s, 9, true)
-  checkContains(t, s, 11, false)
-  s.Remove(9)
-  checkContains(t, s, 9, false)
+	s := EmptySet()
+	checkSetLen(t, s, 0)
+	checkContains(t, s, 0, false)
+	s.Add(0)
+	s.Add(0)
+	checkContains(t, s, 0, true)
+	checkSetLen(t, s, 1)
+	for i := 1; i < 10; i++ {
+		s.Add(i)
+	}
+	checkSetLen(t, s, 10)
+	checkContains(t, s, 9, true)
+	checkContains(t, s, 11, false)
+	s.Remove(9)
+	checkContains(t, s, 9, false)
+}
+
+func checkSubset(t *testing.T, s1, s2 *Set, subset bool) {
+	res := s1.Subset(s2)
+	if res != subset {
+		if subset {
+			t.Error("Expected s1 to be a subset of s2, but it is not")
+		} else {
+			t.Error("Expected s1 no to be a subset of s2, but it is")
+		}
+	}
+}
+
+func checkSetEqual(t *testing.T, s1, s2 *Set, equal bool) {
+	res := s1.Equals(s2)
+	if res != equal {
+		if equal {
+			t.Error("Expected sets to be equal, but they're not")
+		} else {
+			t.Error("Expected sets to be unequal, but they're equal")
+		}
+	}
+}
+
+func TestSetCompare(t *testing.T) {
+	s1 := EmptySet()
+	s2 := EmptySet()
+	checkSetEqual(t, s1, s2, true)
+	checkSetEqual(t, s2, s1, true)
 }

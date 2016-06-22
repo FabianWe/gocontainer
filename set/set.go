@@ -22,17 +22,17 @@
 
 package set
 
-type setValue interface{}
+type SetValue interface{}
 
 const maxBuffer = 10000
 
 // Set is a unordered collection of unique values.
 type Set struct {
-	elements map[setValue]struct{}
+	elements map[SetValue]struct{}
 }
 
 func EmptySet() *Set {
-	return &Set{make(map[setValue]struct{})}
+	return &Set{make(map[SetValue]struct{})}
 }
 
 func (this *Set) Length() int {
@@ -43,15 +43,15 @@ func (this *Set) Empty() bool {
 	return this.Length() == 0
 }
 
-func (this *Set) Add(val setValue) {
+func (this *Set) Add(val SetValue) {
 	this.elements[val] = struct{}{}
 }
 
-func (this *Set) Remove(val setValue) {
+func (this *Set) Remove(val SetValue) {
 	delete(this.elements, val)
 }
 
-func (this *Set) Contains(val setValue) bool {
+func (this *Set) Contains(val SetValue) bool {
 	_, res := this.elements[val]
 	return res
 }
@@ -103,12 +103,16 @@ func (this *Set) Extend(other *Set) {
 	}
 }
 
-func (this *Set) Iter() <-chan setValue {
+// Return a chanel to iterate over all elements in the set.
+// Important: Only use this iterator if you plan to iterate over *all* objects,
+// so don't break the for loop with a break or something like that.
+// If you plan to break the loop you can use Apply.
+func (this *Set) Iter() <-chan SetValue {
 	bufferSize := this.Length()
 	if bufferSize > maxBuffer {
 		bufferSize = maxBuffer
 	}
-	ch := make(chan setValue, bufferSize)
+	ch := make(chan SetValue, bufferSize)
 	go func() {
 		for k, _ := range this.elements {
 			ch <- k
@@ -116,4 +120,17 @@ func (this *Set) Iter() <-chan setValue {
 		close(ch)
 	}()
 	return ch
+}
+
+// Applies a function to all values (acts like an iterator).
+// The function argument is applied to all values in the set, if the function
+// returns true the next element will be visited, otherwise the iteration
+// will stop.
+// See the example.
+func (this *Set) Apply(f func(val SetValue) bool) {
+	for k, _ := range this.elements {
+		if !f(k) {
+			break
+		}
+	}
 }
