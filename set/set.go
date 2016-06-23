@@ -135,7 +135,6 @@ func (this *Set) Apply(f func(val SetValue) bool) {
 	}
 }
 
-
 func (this *Set) Pop() (SetValue, bool) {
 	var val SetValue = nil
 	succ := false
@@ -148,4 +147,12 @@ func (this *Set) Pop() (SetValue, bool) {
 		this.Remove(val)
 	}
 	return val, succ
+}
+
+func (this *Set) Copy() *Set {
+	res := EmptySet()
+	for k, _ := range this.elements {
+		res.Add(k)
+	}
+	return res
 }
