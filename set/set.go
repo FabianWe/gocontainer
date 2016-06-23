@@ -134,3 +134,18 @@ func (this *Set) Apply(f func(val SetValue) bool) {
 		}
 	}
 }
+
+
+func (this *Set) Pop() (SetValue, bool) {
+	var val SetValue = nil
+	succ := false
+	for k, _ := range this.elements {
+		val = k
+		succ = true
+		break
+	}
+	if succ {
+		this.Remove(val)
+	}
+	return val, succ
+}
