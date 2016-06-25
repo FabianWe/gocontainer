@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+// Package provides a set datatype, i.e. a container of unique elements.
 package set
 
 // An empty interface for elements stored in the set.
