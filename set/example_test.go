@@ -28,7 +28,7 @@ import (
 )
 
 // Iterate over a set of ints and compute the sum of its elements.
-func ExampleIter() {
+func Example() {
 	s := set.EmptySet()
 	for i := 1; i < 6; i++ {
 		s.Add(i)
