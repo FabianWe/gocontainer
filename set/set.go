@@ -22,6 +22,7 @@
 
 package set
 
+// An empty interface for elements stored in the set.
 type SetValue interface{}
 
 const maxBuffer = 10000
@@ -31,31 +32,39 @@ type Set struct {
 	elements map[SetValue]struct{}
 }
 
+// EmptySet creates a set without any elements.
 func EmptySet() *Set {
 	return &Set{make(map[SetValue]struct{})}
 }
 
+// Length returns the number of elements in the set.
 func (this *Set) Length() int {
 	return len(this.elements)
 }
 
+// Empty returns true if the set does not contain any elements, and false
+// otherwise.
 func (this *Set) Empty() bool {
 	return this.Length() == 0
 }
 
+// Add an element to the set.
 func (this *Set) Add(val SetValue) {
 	this.elements[val] = struct{}{}
 }
 
+// Remove an element from the set.
 func (this *Set) Remove(val SetValue) {
 	delete(this.elements, val)
 }
 
+// Contains returns true if val is contained in the set, false otherwise.
 func (this *Set) Contains(val SetValue) bool {
 	_, res := this.elements[val]
 	return res
 }
 
+// Subset checks if this is a subset of the other set, i.e. this <= other.
 func (this *Set) Subset(other *Set) bool {
 	for val := range this.Iter() {
 		if !other.Contains(val) {
@@ -65,6 +74,7 @@ func (this *Set) Subset(other *Set) bool {
 	return true
 }
 
+// Equals returns true if both sets are equal.
 func (this *Set) Equals(other *Set) bool {
 	if this.Length() != other.Length() {
 		return false
@@ -72,6 +82,7 @@ func (this *Set) Equals(other *Set) bool {
 	return this.Subset(other)
 }
 
+// Union returns a new set containing elements from both sets.
 func (this *Set) Union(other *Set) *Set {
 	res := EmptySet()
 	for k, _ := range this.elements {
@@ -83,6 +94,8 @@ func (this *Set) Union(other *Set) *Set {
 	return res
 }
 
+// Intersect returns a new set containing elements that are contained in both
+// sets.
 func (this *Set) Intersect(other *Set) *Set {
 	s1, s2 := this, other
 	if other.Length() < this.Length() {
@@ -97,6 +110,7 @@ func (this *Set) Intersect(other *Set) *Set {
 	return res
 }
 
+// Extend adds all elements from another set to this set.
 func (this *Set) Extend(other *Set) {
 	for k, _ := range other.elements {
 		this.Add(k)
@@ -122,7 +136,7 @@ func (this *Set) Iter() <-chan SetValue {
 	return ch
 }
 
-// Applies a function to all values (acts like an iterator).
+// Apply applies a function to all values (acts like an iterator).
 // The function argument is applied to all values in the set, if the function
 // returns true the next element will be visited, otherwise the iteration
 // will stop.
@@ -135,6 +149,8 @@ func (this *Set) Apply(f func(val SetValue) bool) {
 	}
 }
 
+// Pop returns and removes a random element from the set, returns as second
+// value true if there was an element. If there was no element nil is returned.
 func (this *Set) Pop() (SetValue, bool) {
 	var val SetValue = nil
 	succ := false
@@ -149,6 +165,7 @@ func (this *Set) Pop() (SetValue, bool) {
 	return val, succ
 }
 
+// Copy creates a new set containing the elements from the current set.
 func (this *Set) Copy() *Set {
 	res := EmptySet()
 	for k, _ := range this.elements {
