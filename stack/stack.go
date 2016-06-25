@@ -20,12 +20,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+// Package provides a simple LIFO (last-in-first-out) stack.
 package stack
 
-type stackValue interface{}
+// Type for elements stored in the stack nodes.
+type StackValue interface{}
 
+// A node has a value it stores and a pointer to the next node (nil if there is
+// no next node).
 type stackNode struct {
-	value stackValue
+	value StackValue
 	next  *stackNode
 }
 
@@ -35,24 +39,29 @@ type Stack struct {
 	size  int
 }
 
+// EmptyStack creates a new stack without any elements.
 func EmptyStack() *Stack {
 	return &Stack{nil, 0}
 }
 
+// Length returns the number of elements currently on the stack.
 func (this *Stack) Length() int {
 	return this.size
 }
 
+// Empty returns true if there are no elements on the stack.
 func (this *Stack) Empty() bool {
 	return this.Length() == 0
 }
 
-func (this *Stack) Push(val stackValue) {
+// Push adds a new value to the front of the stack.
+func (this *Stack) Push(val StackValue) {
 	this.first = &stackNode{val, this.first}
 	this.size++
 }
 
-func (this *Stack) Pop() stackValue {
+// Pop returns the first element of the stack, nil if the stack is empty.
+func (this *Stack) Pop() StackValue {
 	if this.Empty() {
 		return nil
 	}
