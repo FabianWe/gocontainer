@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// Package provides a simple LIFO FIFO (first-in-first-out) datatype.
+// Package provides a simple FIFO (first-in-first-out) datatype.
 package queue
 
 // Type for elements stored in the queue nodes.
