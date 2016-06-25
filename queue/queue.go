@@ -20,12 +20,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+// Package provides a simple LIFO FIFO (first-in-first-out) datatype.
 package queue
 
-type queueValue interface{}
+// Type for elements stored in the queue nodes.
+type QueueValue interface{}
 
+// A node has a value it stores and a pointer to the next node (nil if there is
+// no next node).
 type queueNode struct {
-	value queueValue
+	value QueueValue
 	next  *queueNode
 }
 
@@ -36,19 +40,23 @@ type Queue struct {
 	size  int
 }
 
+// EmptyQueue creates a new queue without any elements.
 func EmptyQueue() *Queue {
 	return &Queue{nil, nil, 0}
 }
 
+// Length returns the number of elements currently in the queue.
 func (this *Queue) Length() int {
 	return this.size
 }
 
+// Empty returns true if there are no elements in the queue.
 func (this *Queue) Empty() bool {
 	return this.Length() == 0
 }
 
-func (this *Queue) Push(val queueValue) {
+// Push adds a new value to the back of the queue.
+func (this *Queue) Push(val QueueValue) {
 	n := queueNode{val, nil}
 	if this.Empty() {
 		// first and last are the same new node
@@ -63,7 +71,8 @@ func (this *Queue) Push(val queueValue) {
 	this.size++
 }
 
-func (this *Queue) Pop() queueValue {
+// Pop returns the first element of the queue, nil if the queue is empty.
+func (this *Queue) Pop() QueueValue {
 	if this.Empty() {
 		return nil
 	}

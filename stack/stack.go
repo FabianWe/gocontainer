@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// Package provides a simple LIFO (last-in-first-out) stack.
+// Package provides a simple LIFO (last-in-first-out) datatype.
 package stack
 
 // Type for elements stored in the stack nodes.
