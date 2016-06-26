@@ -38,6 +38,15 @@ func EmptySet() *Set {
 	return &Set{make(map[SetValue]struct{})}
 }
 
+// Create a set containing all elements from values.
+func MakeSet(values ...SetValue) *Set {
+	s := EmptySet()
+	for _, v := range values {
+		s.Add(v)
+	}
+	return s
+}
+
 // Length returns the number of elements in the set.
 func (this *Set) Length() int {
 	return len(this.elements)
